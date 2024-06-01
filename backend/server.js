@@ -1,44 +1,46 @@
 /* Require modules
 ---------------------------------------------------------- */
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors')
-const path = require('path')
-
-
-/* Require the db connection, models, and seed data
----------------------------------------------------------- */
-const db = require('./models');
-
-
-/* Require the routes in the controllers folder
---------------------------------------------------------------- */
-const bmiController = require('../backend/controllers/bmiController')
-
+const cors = require('cors');
+const mongoose = require('mongoose');
+const path = require('path');
 
 /* Create the Express app
 ---------------------------------------------------------- */
 const app = express();
 
-
 /* Middleware (app.use)
 ---------------------------------------------------------- */
-// cross origin allowance
-app.use(cors())
-// body parser - used for POST/PUT/PATCH routes:
+// Cross origin allowance
+app.use(cors());
+// Body parser - used for POST/PUT/PATCH routes:
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+app.use(express.json());
 
+/* MongoDB Connection
+---------------------------------------------------------- */
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
 /* Mount routes
 ---------------------------------------------------------- */
-// This tells our app to look at the `controllers/comments.js` file 
-// to handle all routes that begin with `localhost:3000/api/`
-app.use('/api/bmiRoute}', ('../backend/routes/bmiRoute.js'))
+const bmiRoute = require('./routes/bmiRoute'); // Correctly require the route
+app.use('/api/bmiRoute', bmiRoute); // Use the route as middleware
 
+/* Serve static files from the 'frontend/dist' directory
+---------------------------------------------------------- */
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 /* Tell the app to listen on the specified port
 ---------------------------------------------------------- */
-app.listen(process.env.PORT, function () {
-    console.log('Express is listening to port', process.env.PORT);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, function () {
+    console.log('Express is listening to port', PORT);
 });

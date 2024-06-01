@@ -1,7 +1,15 @@
+import BMI from "./components/Bmi";
+// import Header from "./components/Header";
+// import Footer from "./components/Footer"; // Correct import
+
 export default function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <div className="App">
+      <div className="Parent-Container">
+        {/* <Header /> */}
+        <BMI />
+        {/* <Footer /> */}
+      </div>
+    </div>
   )
 }
