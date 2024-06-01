@@ -1,20 +1,25 @@
-import 'dotenv/config';
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [react()],
-    root: path.resolve(__dirname, 'frontend'),
-    server: {
-        proxy: {
-            '/api': {
-                target: `http://localhost:${process.env.PORT}`,
-                changeOrigin: true,
-                secure: false,
-                ws: true,
-            }
-        }
-    }
-})
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+      "./frontend/index.html",
+      "./frontend/src/**/*.{js,ts,jsx,tsx}",
+    ],
+    theme: {
+      extend: {
+        colors: {
+          'gray-900': '#1d2634',
+          'gray-800': '#263043',
+          'blue-500': '#2962ff',
+          'orange-500': '#ff6d00',
+          'green-500': '#2e7d32',
+          'red-500': '#d50000',
+          'blue-600': '#1E40AF', // New color for sidebar
+        },
+        fontFamily: {
+          montserrat: ['Montserrat', 'sans-serif'],
+        },
+      },
+    },
+    plugins: [],
+  }
+  
